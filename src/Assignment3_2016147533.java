@@ -50,8 +50,12 @@ public class Assignment3_2016147533 {
 				res1 += "+-";
 				if (tmp.getLeft() != null || tmp.getRight() != null)
 					res2 += "| "+tmp.getCode();
-				else
-					res2 += "| "+tmp.getValue()+" : "+tmp.getCode();
+				else {
+					if (tmp.getValue() == "\\n")
+						res2 += "| "+tmp.getValue()+": "+tmp.getCode();
+					else
+						res2 += "| "+tmp.getValue()+" : "+tmp.getCode();
+				}
 				res3 += "+-";
 				if (tmp.getLeft() != null) {
 					res4 = res4.substring(0, res4.length()-1) + "/";
