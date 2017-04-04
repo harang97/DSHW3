@@ -48,7 +48,10 @@ public class Assignment3_2016147533 {
 				res5 = res5.substring(0, cursor);
 				
 				res1 += "+-";
-				res2 += "| "+tmp.getCode();
+				if (tmp.getLeft() != null || tmp.getRight() != null)
+					res2 += "| "+tmp.getCode();
+				else
+					res2 += "| "+tmp.getValue()+" : "+tmp.getCode();
 				res3 += "+-";
 				if (tmp.getLeft() != null) {
 					res4 = res4.substring(0, res4.length()-1) + "/";
@@ -57,11 +60,21 @@ public class Assignment3_2016147533 {
 				res4 += "  ";
 				res5 += "  ";
 				
-				for (int j=0; j<tmp.getCode().length(); j++) {
-					res1 += "-";
-					res3 += "-";
-					res4 += " ";
-					res5 += " ";
+				if (tmp.getRight() != null || tmp.getLeft() != null) {
+					for (int j=0; j<tmp.getCode().length(); j++) {
+						res1 += "-";
+						res3 += "-";
+						res4 += " ";
+						res5 += " ";
+					}
+				}
+				else {
+					for (int j=0; j<tmp.getCode().length()+4; j++) {
+						res1 += "-";
+						res3 += "-";
+						res4 += " ";
+						res5 += " ";
+					}
 				}
 				
 				res1 += "-+";
@@ -80,7 +93,10 @@ public class Assignment3_2016147533 {
 					res5 += " \\";
 				}
 				
-				cursor += 4 + tmp.getCode().length();
+				if (tmp.getRight() != null || tmp.getLeft() != null) 
+					cursor += 4 + tmp.getCode().length();
+				else
+					cursor += 8 + tmp.getCode().length();
 				
 				if (tmp.getLeft() != null)
 					Q.enqueue(tmp.getLeft());
@@ -114,13 +130,22 @@ public class Assignment3_2016147533 {
 	public static void inorder(Entry node) {
 		if (node.getLeft() != null) {
 			inorder(node.getLeft());
-			node.setlxpos(node.getLeft().getlxpos()+node.getLeft().getCode().length()+6);
-			node.setrxpos(max(node.getLeft().getrxpos(), node.getlxpos()+node.getCode().length()+3));
+			if (node.getLeft().getLeft() != null || node.getLeft().getRight() != null) {
+				node.setlxpos(node.getLeft().getlxpos()+node.getLeft().getCode().length()+6);
+				node.setrxpos(max(node.getLeft().getrxpos(), node.getlxpos()+node.getCode().length()+3));
+			}
+			else {
+				node.setrxpos(max(node.getLeft().getrxpos(), node.getlxpos()+node.getCode().length()+7));
+				node.setlxpos(node.getLeft().getlxpos()+node.getLeft().getCode().length()+10);
+			}
 			currxpos = node.getrxpos();
 		}
 		else { // if node doesn't have left node
 			node.setlxpos(currxpos+3);
-			node.setrxpos(node.getlxpos()+node.getCode().length()+3);
+			if (node.getRight() != null)
+				node.setrxpos(node.getlxpos()+node.getCode().length()+3);
+			else
+				node.setrxpos(node.getlxpos()+node.getCode().length()+7);
 			currxpos = node.getrxpos();
 		}
 		if (node.getRight() != null) {
