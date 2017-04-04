@@ -12,7 +12,12 @@ public class Assignment3_2016147533 {
 	static int currxpos;
 	
 	public static String printTree(Entry node) throws EmptyQueueException {
-		String res = "";
+		String totalres = "";
+		String res1 = "";
+		String res2 = "";
+		String res3 = "";
+		String res4 = "";
+		String res5 = "";
 		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		ArrayQueue<Entry> Q = new ArrayQueue();
@@ -23,14 +28,58 @@ public class Assignment3_2016147533 {
 		while(!Q.isEmpty()) {
 			tlen = Q.size();
 			cursor = 0;
+			res1 = "";
+			res2 = "";
+			res3 = "";
+			res4 = "";
+			res5 = "";
 			for (int i=0; i<tlen; i++) {
 				tmp = Q.dequeue();
 				
 				while (cursor<tmp.getlxpos()) {
 					cursor++;
-					res += " ";
+					res1 += " ";
+					res2 += " ";
+					res3 += " ";
+					res4 += " ";
+					res5 += " ";
 				}
-				res += "| "+tmp.getCode()+" |";
+				res4 = res4.substring(0, cursor);
+				res5 = res5.substring(0, cursor);
+				
+				res1 += "+-";
+				res2 += "| "+tmp.getCode();
+				res3 += "+-";
+				if (tmp.getLeft() != null) {
+					res4 = res4.substring(0, res4.length()-1) + "/";
+					res5 = res5.substring(0, res5.length()-2) + "/ ";
+				}
+				res4 += "  ";
+				res5 += "  ";
+				
+				for (int j=0; j<tmp.getCode().length(); j++) {
+					res1 += "-";
+					res3 += "-";
+					res4 += " ";
+					res5 += " ";
+				}
+				
+				res1 += "-+";
+				res2 += " |";
+				res3 += "-+";
+				res4 += "  ";
+				res5 += "  ";
+				
+				if (tmp.getRight() != null) {
+					res4 += "\\";
+					System.out.println(Integer.toString(tmp.getRight().getlxpos() - tmp.getrxpos()));
+					for (int j=0; j<tmp.getRight().getlxpos()-tmp.getlxpos()-tmp.getCode().length()-6; j++) {
+						res4 += "_";
+						res5 += " ";
+					}
+					res5 += " \\";
+				}
+				
 				cursor += 4 + tmp.getCode().length();
 				
 				if (tmp.getLeft() != null)
@@ -39,10 +88,10 @@ public class Assignment3_2016147533 {
 					Q.enqueue(tmp.getRight());
 			}
 			
-			res += "\r\n";
+			totalres += res1 + "\r\n" + res2 + "\r\n" + res3 + "\r\n" + res4 + "\r\n" + res5 + "\r\n";
 		}
 		
-		return res;
+		return totalres;
 	}
 	
 	public static void preorder(Entry node) { // traverse by preorder and set every leaf node's code
