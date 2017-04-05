@@ -25,7 +25,7 @@ public class Assignment3_2016147533 {
 		int cursor = 0;
 		Entry tmp;
 		Q.enqueue(node);
-		while(!Q.isEmpty()) {
+		while(!Q.isEmpty()) {  // level order
 			tlen = Q.size();
 			cursor = 0;
 			res1 = "";
@@ -33,7 +33,7 @@ public class Assignment3_2016147533 {
 			res3 = "";
 			res4 = "";
 			res5 = "";
-			for (int i=0; i<tlen; i++) {
+			for (int i=0; i<tlen; i++) { // for {...} -> one level
 				tmp = Q.dequeue();
 				
 				while (cursor<tmp.getlxpos()) {
@@ -44,6 +44,8 @@ public class Assignment3_2016147533 {
 					res4 += " ";
 					res5 += " ";
 				}
+				if (tmp.getLeft() == null && tmp.getRight() == null)
+					System.out.println(tmp.getlxpos());
 				res4 = res4.substring(0, cursor);
 				res5 = res5.substring(0, cursor);
 				
@@ -89,7 +91,6 @@ public class Assignment3_2016147533 {
 				
 				if (tmp.getRight() != null) {
 					res4 += "\\";
-					System.out.println(Integer.toString(tmp.getRight().getlxpos() - tmp.getrxpos()));
 					for (int j=0; j<tmp.getRight().getlxpos()-tmp.getlxpos()-tmp.getCode().length()-6; j++) {
 						res4 += "_";
 						res5 += " ";
@@ -114,21 +115,6 @@ public class Assignment3_2016147533 {
 		return totalres;
 	}
 	
-	public static void preorder(Entry node) { // traverse by preorder and set every leaf node's code
-		if (node.getLeft() != null) {
-			node.getLeft().setCode(node.getCode()+"0");
-			preorder(node.getLeft());
-		}
-		if (node.getRight() != null) {
-			node.getRight().setCode(node.getCode()+"1");
-			preorder(node.getRight());
-		}
-		else if (node.getLeft() == null && node.getRight() == null) { // if leaf node is encountered, print result
-			res += node.getValue()+"="+node.getCode()+"; ";
-			inputsize += node.getKey() * node.getCode().length();
-		}
-	}
-	
 	public static int max(int a, int b) { return ( a > b ? a : b);	}
 	
 	public static void inorder(Entry node) {
@@ -139,8 +125,8 @@ public class Assignment3_2016147533 {
 				node.setrxpos(max(node.getLeft().getrxpos(), node.getlxpos()+node.getCode().length()+3));
 			}
 			else {
-				node.setrxpos(max(node.getLeft().getrxpos(), node.getlxpos()+node.getCode().length()+7));
 				node.setlxpos(node.getLeft().getlxpos()+node.getLeft().getCode().length()+10);
+				node.setrxpos(max(node.getLeft().getrxpos(), node.getlxpos()+node.getCode().length()+7));
 			}
 			currxpos = node.getrxpos();
 		}
@@ -156,6 +142,21 @@ public class Assignment3_2016147533 {
 			inorder(node.getRight());
 			node.setrxpos(node.getRight().getrxpos());
 			currxpos = node.getrxpos();
+		}
+	}
+	
+	public static void preorder(Entry node) { // traverse by preorder and set every leaf node's code
+		if (node.getLeft() != null) {
+			node.getLeft().setCode(node.getCode()+"0");
+			preorder(node.getLeft());
+		}
+		if (node.getRight() != null) {
+			node.getRight().setCode(node.getCode()+"1");
+			preorder(node.getRight());
+		}
+		else if (node.getLeft() == null && node.getRight() == null) { // if leaf node is encountered, print result
+			res += node.getValue()+"="+node.getCode()+"; ";
+			inputsize += node.getKey() * node.getCode().length();
 		}
 	}
 	
